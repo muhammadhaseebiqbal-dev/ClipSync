@@ -13,7 +13,7 @@ The Windows client runs invisibly in the background and automatically starts whe
 2. Run the following command to download and execute the installation script directly from this repository:
 
 ```powershell
-irm https://raw.githubusercontent.com/muhammadhaseebiqbal-dev/ClipSync/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/muhammadhaseebiqbal-dev/ClipSync/master/install.ps1 | iex
 ```
 
 This script will:

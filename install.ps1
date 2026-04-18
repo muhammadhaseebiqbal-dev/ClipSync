@@ -5,7 +5,7 @@ $appName = "ClipSync"
 $exeName = "main.exe"
 $installDir = "$env:LOCALAPPDATA\$appName"
 $exePath = "$installDir\$exeName"
-$repoUrl = "https://github.com/muhammadhaseebiqbal-dev/ClipSync/raw/main/WindowsClient/main.exe"
+$repoUrl = "https://github.com/muhammadhaseebiqbal-dev/ClipSync/raw/master/WindowsClient/main.exe"
 
 Write-Host "Creating installation directory: $installDir" -ForegroundColor Cyan
 if (-not (Test-Path $installDir)) {
