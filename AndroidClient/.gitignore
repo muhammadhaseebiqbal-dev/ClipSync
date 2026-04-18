@@ -1,0 +1,33 @@
+# ---- Android / Kotlin / Gradle ----
+*.iml
+.gradle/
+local.properties
+**/build/
+**/captures/
+.externalNativeBuild/
+.cxx/
+
+# ---- Android Studio / IntelliJ ----
+.idea/
+!.idea/codeStyles/
+!.idea/inspectionProfiles/
+
+# ---- OS files ----
+.DS_Store
+Thumbs.db
+
+# ---- Logs ----
+*.log
+
+# ---- Kotlin ----
+*.kotlin_module
+
+# ---- Signing / secrets ----
+*.jks
+*.keystore
+keystore.properties
+google-services.json
+secrets.properties
+
+# ---- NDK ----
+obj/
