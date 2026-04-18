@@ -1,11 +1,11 @@
 # PowerShell Installation Script for Ecosystem Windows Client
 # Run this from an Administrator PowerShell terminal
 
-$appName = "EcosystemClipboard"
+$appName = "ClipSync"
 $exeName = "main.exe"
 $installDir = "$env:LOCALAPPDATA\$appName"
 $exePath = "$installDir\$exeName"
-$repoUrl = "https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/EcosystemClipboard/main/$exeName" # UPDATE THIS URL LATER
+$repoUrl = "https://github.com/muhammadhaseebiqbal-dev/ClipSync/raw/main/WindowsClient/main.exe"
 
 Write-Host "Creating installation directory: $installDir" -ForegroundColor Cyan
 if (-not (Test-Path $installDir)) {
@@ -13,9 +13,7 @@ if (-not (Test-Path $installDir)) {
 }
 
 Write-Host "Downloading background client..." -ForegroundColor Cyan
-# Invoke-WebRequest -Uri $repoUrl -OutFile $exePath
-# FOR LOCAL TESTING: Let's simply copy it instead of downloading since we haven't published to GitHub yet.
-Copy-Item ".\WindowsClient\main.exe" -Destination $exePath -Force
+Invoke-WebRequest -Uri $repoUrl -OutFile $exePath
 
 Write-Host "Configuring Windows Auto-Startup..." -ForegroundColor Cyan
 $registryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
