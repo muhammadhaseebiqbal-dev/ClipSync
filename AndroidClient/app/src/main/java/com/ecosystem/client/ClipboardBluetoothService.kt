@@ -26,11 +26,29 @@ class ClipboardBluetoothService : Service() {
     private var btSocket: BluetoothSocket? = null
     private var isRunning = true
     private val uiHandler = Handler(Looper.getMainLooper())
+    private var lastReceivedText = ""
+    private var clipboardManager: ClipboardManager? = null
+
+    private val clipboardListener = ClipboardManager.OnPrimaryClipChangedListener {
+        clipboardManager?.primaryClip?.let { clip ->
+            if (clip.itemCount > 0) {
+                val newText = clip.getItemAt(0).text?.toString()
+                if (!newText.isNullOrEmpty() && newText != lastReceivedText) {
+                    lastReceivedText = newText
+                    sendToDesktop(newText)
+                }
+            }
+        }
+    }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
         super.onCreate()
+        
+        clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipboardManager?.addPrimaryClipChangedListener(clipboardListener)
+
         createNotificationChannel()
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Ecosystem Sync")
@@ -98,12 +116,24 @@ class ClipboardBluetoothService : Service() {
                 // We received text from the PC!
                 val receivedText = String(buffer, 0, bytesRead).trim()
                 Log.d("EcoSync", "Received from Desktop: $receivedText")
+                lastReceivedText = receivedText
                 setAndroidClipboard(receivedText)
 
             } catch (e: Exception) {
                 break
             }
         }
+    }
+
+    private fun sendToDesktop(text: String) {
+        Thread {
+            try {
+                btSocket?.outputStream?.write(text.toByteArray())
+                Log.d("EcoSync", "Sent to Desktop: $text")
+            } catch (e: Exception) {
+                Log.e("EcoSync", "Failed to send to Desktop: ${e.message}")
+            }
+        }.start()
     }
 
     private fun setAndroidClipboard(text: String) {
@@ -119,6 +149,7 @@ class ClipboardBluetoothService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         isRunning = false
+        clipboardManager?.removePrimaryClipChangedListener(clipboardListener)
         btSocket?.close()
     }
 }
